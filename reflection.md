@@ -19,28 +19,22 @@ The game opened successfully in Streamlit with a difficulty selector, a guess in
 
 ## 2. How did you use AI as a teammate?
 
-- Which AI tools did you use on this project (for example: ChatGPT, Gemini, Copilot)?
-- Give one example of an AI suggestion that was correct, including what the AI suggested and how you verified the result.
-- Give one example of an AI suggestion you did not accept as written. Include what the AI suggested, why you rejected or changed it, and how you verified your version. It does not have to have been wrong: over-engineered, out of scope, harder to read, or a poor fit for this codebase all count.
+I used ChatGPT to clarify the project instructions and GitHub Copilot in VS Code to explain the code and suggest changes and tests. One correct suggestion was to move check_guess into logic_utils.py, correct the hint directions, and remove the conversion of the secret to a string so comparisons stayed numeric. I reviewed the changes and verified them with five passing tests and manual guesses that produced the correct hints. I did not accept Copilot’s proposed test command using the Playlist Chaos project’s Python environment because it belonged to a different project, so I skipped it and used this project’s .venv interpreter instead. The pytest output confirmed the correct interpreter path and showed all five tests passing.
 
 ---
 
 ## 3. Debugging and testing your fixes
 
-- How did you decide whether a bug was really fixed?
-- Describe at least one test you ran, manually or using pytest, and what it showed you about your code.
-- Did AI help you design or understand any tests? How?
+I checked repairs by reviewing the code differences, running automated tests, and repeating the original actions in Streamlit. Running `.\.venv\Scripts\python.exe -m pytest -v` produced five passing tests, including two new tests checking that 60 against 50 says “Go LOWER!” and 40 against 50 says “Go HIGHER!”. Copilot helped update the starter tests to unpack the documented (outcome, message) tuple and added the message tests. I manually verified that New Game reset attempts, score, history, and playing status after both a win and a loss, and that the restarted game accepted another guess. In a fresh session, I also confirmed that Normal difficulty began with zero attempts used and eight remaining; the automated tests cover guess logic, while the manual checks cover the interface and session state.
 
 ---
 
 ## 4. What did you learn about Streamlit and state?
 
-- How would you explain Streamlit reruns and session state to a friend who has never used Streamlit?
+I learned that interacting with a Streamlit widget can cause the Python script to run again from top to bottom. Ordinary variables can be recreated during a rerun, while session state preserves values such as the secret number, attempts, score, history, and game status. I would explain session state to a friend as the game’s memory between interactions. The New Game bug showed that changing the secret alone was not enough because the old winning status stayed in memory and blocked further play. Resetting the game’s session values before rerunning allowed a new game to begin.
 
 ---
 
 ## 5. Looking ahead: your developer habits
 
-- What is one habit or strategy from this project that you want to reuse in future labs or projects? This could be a testing habit, a prompting strategy, or a way you used Git.
-- What is one thing you would do differently next time you work with AI on a coding task?
-- In one or two sentences, describe how this project changed the way you think about AI-generated code.
+I want to keep the habit of reproducing a bug, recording its trigger, and checking the repair with both automated tests and manual play. I also want to continue reviewing AI-generated changes and making separate Git commits for meaningful stages of my work. Next time, I would specify the project folder and Python interpreter earlier so the AI uses the correct environment. This project showed me that AI-generated code needs verification even when it looks convincing or claims to be production-ready. Keeping a human-in-the-loop helps me decide which suggestions fit the project and whether the results support accepting them.
